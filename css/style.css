@@ -1,0 +1,43 @@
+body {
+    background-color: black;
+}
+
+img {
+    animation: rotate-anime 5s linear infinite;
+  }
+  @keyframes rotate-anime {
+    0%  {transform: rotate(0);}
+    100%  {transform: rotate(360deg);}
+}
+
+.image-container {
+  position: relative;
+  display: inline-block;
+}
+
+#glowCanvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+#keyboard {
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s ease-in-out;
+}
+
+#keyboard:hover {
+  transform: scale(1.05);
+}
+
+.col-9 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+}
