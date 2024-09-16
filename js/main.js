@@ -19,6 +19,8 @@ setInterval(() => {
 window.onload = adjustCanvasSize;
 window.onresize = adjustCanvasSize;
 
+renderItems();
+
 const ctx = document.getElementById('myChart');
 
 const chart = new Chart(ctx, {
@@ -26,7 +28,7 @@ const chart = new Chart(ctx, {
     data: {
         labels: [],
         datasets: [{
-            label: 'KPM',
+            label: 'kpm',
             data: [],
             backgroundColor: "#D2691E",
             borderColor: "#D2691E",
@@ -34,7 +36,7 @@ const chart = new Chart(ctx, {
             tension: 0.3
         },
         {
-            label: 'rawKPM',
+            label: 'raw-kpm',
             data: [],
             //桃色
             backgroundColor: "#FF69B4",
@@ -92,7 +94,18 @@ function adjustCanvasSize() {
     drawGlowEffect();
 }
 
+function renderItems() {
+    const itemCounts = document.getElementsByName('item-cnt');
+    const itemImages = document.getElementsByClassName('item-img');
 
+    for (let i = 0; i < itemCounts.length; i++) {
+        const cnt = Math.max(0, 3 - i);
+        itemCounts[i].innerText = cnt;
+        if (cnt > 0) {
+            itemImages[i].classList.remove('locked');
+        }
+    }
+}
 
 function createFallingKeyboard() {
     const keyboardImg = document.createElement('img');

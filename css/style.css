@@ -61,6 +61,14 @@ body {
   animation: fall 5s linear infinite;
 }
 
+.items {
+  cursor: pointer;
+}
+
+.items:hover {
+  transform: scale(1.05);
+}
+
 .item-img {
   height: 50px;
 }
