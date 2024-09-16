@@ -2,14 +2,6 @@ body {
     background-color: black;
 }
 
-img {
-    animation: rotate-anime 5s linear infinite;
-  }
-  @keyframes rotate-anime {
-    0%  {transform: rotate(0);}
-    100%  {transform: rotate(360deg);}
-}
-
 .image-container {
   position: relative;
   display: inline-block;
@@ -28,16 +20,51 @@ img {
   position: relative;
   z-index: 1;
   transition: transform 0.3s ease-in-out;
+
+  animation: rotate-anime 5s linear infinite;
+}
+@keyframes rotate-anime {
+  0%  {transform: rotate(0);}
+  100%  {transform: rotate(360deg);}
 }
 
 #keyboard:hover {
   transform: scale(1.05);
 }
 
-.col-9 {
+.col-8 {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   height: 100%;
+}
+
+@keyframes fall {
+  0% {
+      transform: translateY(-100%);
+      opacity: 0;
+  }
+  50% {
+      opacity: 0.7;
+  }
+  100% {
+      transform: translateY(60vh);
+      opacity: 0;
+  }
+}
+
+.falling {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: fall 5s linear infinite;
+}
+
+.item-img {
+  height: 50px;
+}
+
+.locked {
+  filter: brightness(10%);
 }

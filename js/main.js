@@ -1,3 +1,69 @@
+let count = 1000;
+let kpm = 777;
+let rawKpm = 0;
+
+const update = () => {
+    count += Math.floor((kpm + rawKpm) / 10);
+    document.getElementById('typed_count').innerText = String(count);
+    document.getElementById('kpm').innerText = String(kpm + rawKpm);
+    // document.getElementById('rawKpm').innerText = String(rawKpm);
+}
+
+setInterval(() => {
+    update();
+}, 100);
+setInterval(() => {
+    createFallingKeyboard();
+}, 300);
+
+window.onload = adjustCanvasSize;
+window.onresize = adjustCanvasSize;
+
+const ctx = document.getElementById('myChart');
+
+const chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'KPM',
+            data: [],
+            backgroundColor: "#D2691E",
+            borderColor: "#D2691E",
+            borderWidth: 1,
+            tension: 0.3
+        },
+        {
+            label: 'rawKPM',
+            data: [],
+            //桃色
+            backgroundColor: "#FF69B4",
+            borderColor: "#FF69B4",
+            borderWidth: 1,
+            tension: 0.3
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+setInterval(() => {
+    chart.data.datasets[0].data.push(kpm);
+    chart.data.datasets[1].data.push(Math.floor(Math.random() * 1000));
+    chart.data.labels.push('');
+    if (chart.data.datasets[0].data.length > 20) {
+        chart.data.datasets[0].data.shift();
+        chart.data.datasets[1].data.shift();
+        chart.data.labels.shift();
+    }
+    chart.update();
+}, 1000);
+
 function drawGlowEffect() {
     const canvas = document.getElementById('glowCanvas');
     const ctx = canvas.getContext('2d');
@@ -26,5 +92,21 @@ function adjustCanvasSize() {
     drawGlowEffect();
 }
 
-window.onload = adjustCanvasSize;
-window.onresize = adjustCanvasSize;
+
+
+function createFallingKeyboard() {
+    const keyboardImg = document.createElement('img');
+    keyboardImg.src = 'images/ety.png';
+    keyboardImg.className = 'falling';
+    keyboardImg.style.width = '50px';
+
+    const header = document.querySelector('header');
+    header.appendChild(keyboardImg);
+
+    const randomX = Math.random() * window.innerWidth;
+    keyboardImg.style.left = `${randomX}px`;
+
+    setTimeout(() => {
+        keyboardImg.remove();
+    }, 5000);
+}
