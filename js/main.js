@@ -9,12 +9,14 @@ let typedKeysCount = 0;
 let typeText = '';
 let order = [];
 let shuffledOrder = [];
+let itemBelongings = [0, 0, 0, 0, 0, 0, 0];
 
 const typingArea = document.getElementById('typing_area');
 
 setWordEnglish(1000, typingArea);
 loadData();
 setItemName();
+setItemBelongings();
 
 const update = () => {
     autoKpm = calculateAutoKpm();
@@ -82,14 +84,10 @@ setInterval(() => {
 }, 1000);
 
 function saveData() {
+    console.log(itemBelongings);
     const data = {
         masterCount: masterCount,
-        kpm: kpm,
-        rawKpm: rawKpm,
-        typedKeysCount: typedKeysCount,
-        typeText: typeText,
-        order: order,
-        shuffledOrder: shuffledOrder
+        itemBelongings: itemBelongings
     };
     localStorage.setItem('cookeyData', JSON.stringify(data));
 }
@@ -98,13 +96,9 @@ function saveData() {
 function loadData() {
     const data = JSON.parse(localStorage.getItem('cookeyData'));
     if (!data) return;
-    masterCount = data.masterCount;
-    kpm = data.kpm;
-    rawKpm = data.rawKpm;
-    typedKeysCount = data.typedKeysCount;
-    typeText = data.typeText;
-    order = data.order;
-    shuffledOrder = data.shuffledOrder;
+    console.log(data);
+    if (data.masterCount) masterCount = data.masterCount;
+    if (data.itemBelongings) itemBelongings = data.itemBelongings;
 }
 
 function resetData() {
@@ -228,6 +222,7 @@ function buyItem(typedKey) {
     if (masterCount > itemPrice) {
         masterCount -= itemPrice;
         itemCounts[itemIndex].innerText = currentCount + 1;
+        itemBelongings[itemIndex] += 1;
         renderItems();
     }
 }
@@ -236,6 +231,12 @@ function setItemName() {
     const itemNames = document.getElementsByName('item-name');
     for (let i = 0; i < itemNames.length; i++) {
         itemNames[i].innerText = itemData[i].name;
+    }
+}
+function setItemBelongings() {
+    const itemCounts = document.getElementsByName('item-cnt');
+    for (let i = 0; i < itemCounts.length; i++) {
+        itemCounts[i].innerText = itemBelongings[i];
     }
 }
 
