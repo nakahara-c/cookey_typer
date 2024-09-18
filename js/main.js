@@ -1,7 +1,8 @@
 import { wordList } from './wordList.js';
 
-let count = 1000;
-let kpm = 777;
+let count = 0;
+let kpm = 0;
+let autoKpm = 0;
 let rawKpm = 0;
 let typeText = '';
 let order = [];
@@ -14,7 +15,6 @@ const update = () => {
     count += Math.floor((kpm + rawKpm) / 10);
     document.getElementById('typed_count').innerText = String(count);
     document.getElementById('kpm').innerText = String(kpm + rawKpm);
-    // document.getElementById('rawKpm').innerText = String(rawKpm);
 }
 
 setInterval(() => {
@@ -107,8 +107,6 @@ function renderItems() {
     const itemImages = document.getElementsByClassName('item-img');
 
     for (let i = 0; i < itemCounts.length; i++) {
-        const cnt = Math.max(0, 3 - i);
-        itemCounts[i].innerText = cnt;
         if (cnt > 0) {
             itemImages[i].classList.remove('locked');
         }
@@ -155,13 +153,33 @@ function judgeKeys(e) {
     let typedKey = e.key;
     let nextKey = typeText[0];
 
-    typedKey === nextKey ? correctType(typedKey) : incorrectType(typedKey);        
+    const numberKeys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+
+    if (typedKey === nextKey) {
+        correctType(typedKey);
+    } else {
+        if (numberKeys.includes(typedKey)) {
+            buyItem(typedKey);
+        } else {
+            incorrectType(typedKey);
+        }
+    }        
+}
+
+function buyItem(typedKey) {
+    const itemCounts = document.getElementsByName('item-cnt');
+    const itemImages = document.getElementsByClassName('item-img');
+
+    const itemIndex = Number(typedKey) - 1;
+    const currentCount = Number(itemCounts[itemIndex].innerText);
+
+    itemCounts[itemIndex].innerText = currentCount + 1;
+    renderItems();
 }
 
 function correctType(key) {
     typeText = typeText.slice(1);
     typingArea.value = typeText;
-    deleteBlock();
 }
 
 function incorrectType(key) {

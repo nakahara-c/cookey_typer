@@ -16,6 +16,10 @@ body {
   pointer-events: none;
 }
 
+#typing_area {
+  font-size: 1.5em;
+}
+
 #keyboard {
   position: relative;
   z-index: 1;
