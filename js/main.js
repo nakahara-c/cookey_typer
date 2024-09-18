@@ -1,21 +1,27 @@
 import { wordList } from './wordList.js';
 import { itemData } from './itemData.js';
 
-let count = 10000;
+let masterCount = 0;
 let kpm = 0;
 let autoKpm = 0;
 let rawKpm = 0;
+let typedKeysCount = 0;
 let typeText = '';
 let order = [];
 let shuffledOrder = [];
 
 const typingArea = document.getElementById('typing_area');
-setWordEnglish(500, typingArea);
+
+setWordEnglish(1000, typingArea);
+loadData();
+setItemName();
 
 const update = () => {
-    count += Math.floor((kpm + rawKpm) / 10);
-    document.getElementById('typed_count').innerText = String(count);
-    document.getElementById('kpm').innerText = String(kpm + rawKpm);
+    autoKpm = calculateAutoKpm();
+    masterCount += Math.floor(autoKpm / 10);
+    document.getElementById('typed_count').innerText = String(masterCount);
+    document.getElementById('kpm').innerText = String(autoKpm + rawKpm);
+    saveData();
 }
 
 setInterval(() => {
@@ -65,7 +71,7 @@ const chart = new Chart(ctx, {
 
 setInterval(() => {
     chart.data.datasets[0].data.push(kpm);
-    chart.data.datasets[1].data.push(Math.floor(Math.random() * 1000));
+    chart.data.datasets[1].data.push(rawKpm);
     chart.data.labels.push('');
     if (chart.data.datasets[0].data.length > 20) {
         chart.data.datasets[0].data.shift();
@@ -74,6 +80,37 @@ setInterval(() => {
     }
     chart.update();
 }, 1000);
+
+function saveData() {
+    const data = {
+        masterCount: masterCount,
+        kpm: kpm,
+        rawKpm: rawKpm,
+        typedKeysCount: typedKeysCount,
+        typeText: typeText,
+        order: order,
+        shuffledOrder: shuffledOrder
+    };
+    localStorage.setItem('cookeyData', JSON.stringify(data));
+}
+
+
+function loadData() {
+    const data = JSON.parse(localStorage.getItem('cookeyData'));
+    if (!data) return;
+    masterCount = data.masterCount;
+    kpm = data.kpm;
+    rawKpm = data.rawKpm;
+    typedKeysCount = data.typedKeysCount;
+    typeText = data.typeText;
+    order = data.order;
+    shuffledOrder = data.shuffledOrder;
+}
+
+function resetData() {
+    localStorage.removeItem('cookeyData');
+    location.reload();
+}
 
 function drawGlowEffect() {
     const canvas = document.getElementById('glowCanvas');
@@ -113,6 +150,8 @@ function renderItems() {
             itemImages[i].classList.remove('locked');
         }
     }
+
+    setItemName();
 }
 
 function createFallingKeyboard() {
@@ -132,10 +171,13 @@ function createFallingKeyboard() {
     }, 5000);
 }
 
-
-
 function calculateAutoKpm() {
-
+    let newKpm = 0;
+    for (let i = 0; i < itemData.length; i++) {
+        const itemCount = Number(document.getElementsByName('item-cnt')[i].innerText);
+        newKpm += itemData[i].power * itemCount;
+    }
+    return newKpm;
 }
 
 function setWordEnglish(keysCount, typingArea) {
@@ -183,16 +225,24 @@ function buyItem(typedKey) {
     const itemIndex = Number(typedKey) - 1;
     const currentCount = Number(itemCounts[itemIndex].innerText);
 
-    if (count > itemPrice) {
-        count -= itemPrice;
+    if (masterCount > itemPrice) {
+        masterCount -= itemPrice;
         itemCounts[itemIndex].innerText = currentCount + 1;
         renderItems();
+    }
+}
+
+function setItemName() {
+    const itemNames = document.getElementsByName('item-name');
+    for (let i = 0; i < itemNames.length; i++) {
+        itemNames[i].innerText = itemData[i].name;
     }
 }
 
 function correctType(key) {
     typeText = typeText.slice(1);
     typingArea.value = typeText;
+    masterCount += 1;
 }
 
 function incorrectType(key) {
