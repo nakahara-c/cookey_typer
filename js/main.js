@@ -1,6 +1,7 @@
 import { wordList } from './wordList.js';
+import { itemData } from './itemData.js';
 
-let count = 0;
+let count = 10000;
 let kpm = 0;
 let autoKpm = 0;
 let rawKpm = 0;
@@ -107,6 +108,7 @@ function renderItems() {
     const itemImages = document.getElementsByClassName('item-img');
 
     for (let i = 0; i < itemCounts.length; i++) {
+        const cnt = Number(itemCounts[i].innerText);
         if (cnt > 0) {
             itemImages[i].classList.remove('locked');
         }
@@ -128,6 +130,12 @@ function createFallingKeyboard() {
     setTimeout(() => {
         keyboardImg.remove();
     }, 5000);
+}
+
+
+
+function calculateAutoKpm() {
+
 }
 
 function setWordEnglish(keysCount, typingArea) {
@@ -167,14 +175,19 @@ function judgeKeys(e) {
 }
 
 function buyItem(typedKey) {
+    const itemPrice = itemData[Number(typedKey) - 1].price;
+
     const itemCounts = document.getElementsByName('item-cnt');
     const itemImages = document.getElementsByClassName('item-img');
 
     const itemIndex = Number(typedKey) - 1;
     const currentCount = Number(itemCounts[itemIndex].innerText);
 
-    itemCounts[itemIndex].innerText = currentCount + 1;
-    renderItems();
+    if (count > itemPrice) {
+        count -= itemPrice;
+        itemCounts[itemIndex].innerText = currentCount + 1;
+        renderItems();
+    }
 }
 
 function correctType(key) {
