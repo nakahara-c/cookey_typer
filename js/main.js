@@ -160,13 +160,11 @@ function judgeKeys(e) {
 
 function correctType(key) {
     typeText = typeText.slice(1);
-    let typingArea = document.getElementById('typing_area');
     typingArea.value = typeText;
     deleteBlock();
 }
 
 function incorrectType(key) {
-    let typingArea = document.getElementById('typing_area');
     typingArea?.classList.add('missed');
     setTimeout(() => {
         typingArea?.classList.remove('missed');
