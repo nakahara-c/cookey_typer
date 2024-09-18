@@ -76,3 +76,13 @@ body {
 .locked {
   filter: brightness(10%);
 }
+
+@keyframes missType {
+  0% {
+      background-color: beige;
+  }
+}
+
+.missed {
+  animation: missType 1s forwards;
+}
