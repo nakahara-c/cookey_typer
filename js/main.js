@@ -1,6 +1,14 @@
+import { wordList } from './wordList.js';
+
 let count = 1000;
 let kpm = 777;
 let rawKpm = 0;
+let typeText = '';
+let order = [];
+let shuffledOrder = [];
+
+const typingArea = document.getElementById('typing_area');
+setWordEnglish(500, typingArea);
 
 const update = () => {
     count += Math.floor((kpm + rawKpm) / 10);
@@ -122,4 +130,69 @@ function createFallingKeyboard() {
     setTimeout(() => {
         keyboardImg.remove();
     }, 5000);
+}
+
+function setWordEnglish(keysCount, typingArea) {
+
+    let shuffledWordList;
+    shuffledWordList = fisherYatesShuffle(wordList);
+    typeText = shuffledWordList.join(' ');
+    typingArea.value = typeText.slice(0, keysCount);
+    
+    order = [];
+    shuffledOrder = [];
+
+    for (let i = 0; i < (keysCount * 2); i++) order.push(i);
+    shuffledOrder = reorder(fisherYatesShuffle(order), keysCount);
+
+    window.addEventListener('keydown', judgeKeys, false);
+
+    return;
+}
+
+function judgeKeys(e) {
+    e.preventDefault();
+    let typedKey = e.key;
+    let nextKey = typeText[0];
+
+    typedKey === nextKey ? correctType(typedKey) : incorrectType(typedKey);        
+}
+
+function correctType(key) {
+    typeText = typeText.slice(1);
+    let typingArea = document.getElementById('typing_area');
+    typingArea.value = typeText;
+    deleteBlock();
+}
+
+function incorrectType(key) {
+    let typingArea = document.getElementById('typing_area');
+    typingArea?.classList.add('missed');
+    setTimeout(() => {
+        typingArea?.classList.remove('missed');
+    }, 1000);
+}
+
+
+function fisherYatesShuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function reorder(array, cnt) {
+    let result = [...array];
+    let cnt2 = cnt * 2;
+    for (let i = 0; i < array.length; i++) {
+        let a = array[i];
+        let b = (a + cnt) % cnt2;
+        let aIndex = i;
+        let bIndex = array.indexOf(b);
+        if (a < b && aIndex > bIndex) {
+            [result[aIndex], result[bIndex]] = [result[bIndex], result[aIndex]];
+        }
+    }
+    return result;
 }
