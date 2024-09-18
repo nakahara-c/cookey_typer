@@ -2,7 +2,6 @@ import { wordList } from './wordList.js';
 import { itemData } from './itemData.js';
 
 let masterCount = 0;
-let kpm = 0;
 let autoKpm = 0;
 let rawKpm = 0;
 let typedKeysCount = 0;
@@ -20,7 +19,7 @@ setItemBelongings();
 
 const update = () => {
     autoKpm = calculateAutoKpm();
-    masterCount += Math.floor(autoKpm / 10);
+    masterCount += Math.floor(autoKpm / (60 * 10) );
     document.getElementById('typed_count').innerText = String(masterCount);
     document.getElementById('kpm').innerText = String(autoKpm + rawKpm);
     saveData();
