@@ -32,6 +32,9 @@ setInterval(() => {
 setInterval(() => {
     createFallingKeyboard();
 }, 300);
+setInterval(() => {
+    updateRawKpm();
+}, 1000);
 
 window.onload = adjustCanvasSize;
 window.onresize = adjustCanvasSize;
@@ -72,7 +75,7 @@ const chart = new Chart(ctx, {
 });
 
 setInterval(() => {
-    chart.data.datasets[0].data.push(kpm);
+    chart.data.datasets[0].data.push(autoKpm);
     chart.data.datasets[1].data.push(rawKpm);
     chart.data.labels.push('');
     if (chart.data.datasets[0].data.length > 20) {
@@ -92,7 +95,6 @@ function saveData() {
     localStorage.setItem('cookeyData', JSON.stringify(data));
 }
 
-
 function loadData() {
     const data = JSON.parse(localStorage.getItem('cookeyData'));
     if (!data) return;
@@ -104,6 +106,12 @@ function loadData() {
 function resetData() {
     localStorage.removeItem('cookeyData');
     location.reload();
+}
+
+function updateRawKpm() {
+    rawKpm = typedKeysCount * 60;
+    document.getElementById('raw-kpm').innerText = String(rawKpm);
+    typedKeysCount = 0;
 }
 
 function drawGlowEffect() {
@@ -175,7 +183,6 @@ function calculateAutoKpm() {
 }
 
 function setWordEnglish(keysCount, typingArea) {
-
     let shuffledWordList;
     shuffledWordList = fisherYatesShuffle(wordList);
     typeText = shuffledWordList.join(' ');
@@ -244,6 +251,7 @@ function correctType(key) {
     typeText = typeText.slice(1);
     typingArea.value = typeText;
     masterCount += 1;
+    typedKeysCount += 1;
 }
 
 function incorrectType(key) {
