@@ -21,7 +21,8 @@ const update = () => {
     autoKpm = calculateAutoKpm();
     masterCount += Math.floor(autoKpm / (60 * 10));
     document.getElementById('typed_count').innerText = String(masterCount);
-    document.getElementById('kpm').innerText = String(autoKpm + rawKpm);
+    const kps = ((autoKpm + rawKpm) / 60).toFixed(3);
+    document.getElementById('kps').innerText = String(kps);
     saveData();
 }
 
@@ -109,7 +110,8 @@ function resetData() {
 
 function updateRawKpm() {
     rawKpm = typedKeysCount * 60;
-    document.getElementById('raw-kpm').innerText = String(rawKpm);
+    const rawKps = typedKeysCount;
+    document.getElementById('raw-kps').innerText = String(rawKps);
     typedKeysCount = 0;
 }
 
