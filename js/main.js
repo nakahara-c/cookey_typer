@@ -19,7 +19,7 @@ setItemBelongings();
 
 const update = () => {
     autoKpm = calculateAutoKpm();
-    masterCount += Math.floor(autoKpm / (60 * 10) );
+    masterCount += Math.floor(autoKpm / (60 * 10));
     document.getElementById('typed_count').innerText = String(masterCount);
     document.getElementById('kpm').innerText = String(autoKpm + rawKpm);
     saveData();
@@ -186,7 +186,7 @@ function setWordEnglish(keysCount, typingArea) {
     shuffledWordList = fisherYatesShuffle(wordList);
     typeText = shuffledWordList.join(' ');
     typingArea.value = typeText.slice(0, keysCount);
-    
+
     order = [];
     shuffledOrder = [];
 
@@ -213,7 +213,7 @@ function judgeKeys(e) {
         } else {
             incorrectType(typedKey);
         }
-    }        
+    }
 }
 
 function buyItem(typedKey) {
