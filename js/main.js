@@ -11,6 +11,13 @@ let shuffledOrder = [];
 let itemBelongings = [0, 0, 0, 0, 0, 0, 0];
 
 const typingArea = document.getElementById('typing_area');
+const itemButtons = document.getElementsByClassName('items');
+
+for (let i = 0; i < itemButtons.length; i++) {
+    itemButtons[i].addEventListener('click', () => {
+        buyItem(i);
+    });
+}
 
 setWordEnglish(1000, typingArea);
 loadData();
@@ -96,8 +103,8 @@ function saveData() {
 function loadData() {
     const data = JSON.parse(localStorage.getItem('cookeyData'));
     if (!data) return;
-    if (data.c) masterCount = data.masterCount;
-    if (data.b) itemBelongings = data.itemBelongings;
+    if (data.c) masterCount = data.c;
+    if (data.b) itemBelongings = data.b;
 }
 
 function resetData() {
