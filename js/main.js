@@ -19,8 +19,8 @@ setItemBelongings();
 
 const update = () => {
     autoKpm = calculateAutoKpm();
-    masterCount += Math.floor(autoKpm / (60 * 10));
-    document.getElementById('typed_count').innerText = String(masterCount);
+    masterCount += autoKpm / (60 * 10);
+    document.getElementById('typed_count').innerText = String(masterCount.toFixed(0));
     const kps = ((autoKpm + rawKpm) / 60).toFixed(3);
     document.getElementById('kps').innerText = String(kps);
     saveData();
@@ -58,7 +58,6 @@ const chart = new Chart(ctx, {
         {
             label: 'raw-kpm',
             data: [],
-            //桃色
             backgroundColor: "#FF69B4",
             borderColor: "#FF69B4",
             borderWidth: 1,
@@ -87,10 +86,9 @@ setInterval(() => {
 }, 1000);
 
 function saveData() {
-    console.log(itemBelongings);
     const data = {
-        masterCount: masterCount,
-        itemBelongings: itemBelongings
+        c: Math.floor(masterCount),
+        b: itemBelongings
     };
     localStorage.setItem('cookeyData', JSON.stringify(data));
 }
@@ -98,9 +96,8 @@ function saveData() {
 function loadData() {
     const data = JSON.parse(localStorage.getItem('cookeyData'));
     if (!data) return;
-    console.log(data);
-    if (data.masterCount) masterCount = data.masterCount;
-    if (data.itemBelongings) itemBelongings = data.itemBelongings;
+    if (data.c) masterCount = data.masterCount;
+    if (data.b) itemBelongings = data.itemBelongings;
 }
 
 function resetData() {
@@ -177,7 +174,7 @@ function createFallingKeyboard() {
 function calculateAutoKpm() {
     let newKpm = 0;
     for (let i = 0; i < itemData.length; i++) {
-        const itemCount = Number(document.getElementsByName('item-cnt')[i].innerText);
+        const itemCount = itemBelongings[i];
         newKpm += itemData[i].power * itemCount;
     }
     return newKpm;
@@ -219,13 +216,15 @@ function judgeKeys(e) {
 }
 
 function buyItem(typedKey) {
-    const itemPrice = itemData[Number(typedKey) - 1].price;
+    const baseItemPrice = itemData[Number(typedKey) - 1].price;
 
     const itemCounts = document.getElementsByName('item-cnt');
     const itemImages = document.getElementsByClassName('item-img');
-
+    
     const itemIndex = Number(typedKey) - 1;
-    const currentCount = Number(itemCounts[itemIndex].innerText);
+    const currentCount = itemBelongings[itemIndex];
+
+    const itemPrice = baseItemPrice;
 
     if (masterCount > itemPrice) {
         masterCount -= itemPrice;
