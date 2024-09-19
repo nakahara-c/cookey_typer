@@ -157,7 +157,7 @@ function renderItems() {
         if (cnt > 0) {
             itemImages[i].classList.remove('locked');
         }
-        const itemPrice = calcPrice(itemData[i].price, cnt + 1);
+        const itemPrice = calcPrice(itemData[i].price, cnt);
         itemPrices[i].innerText = itemPrice;
 
     }
@@ -236,8 +236,9 @@ function buyItem(typedKey) {
     const currentCount = itemBelongings[itemIndex];
 
     const itemPrice = calcPrice(baseItemPrice, currentCount);
+    console.log(itemPrice);
 
-    if (masterCount > itemPrice) {
+    if (masterCount >= itemPrice) {
         masterCount -= itemPrice;
         itemCounts[itemIndex].innerText = currentCount + 1;
         itemBelongings[itemIndex] += 1;
@@ -245,8 +246,8 @@ function buyItem(typedKey) {
     }
 }
 
-function calcPrice(basePrice, cnt) {
-    return Math.floor(basePrice * (1.15 ** cnt));
+function calcPrice(basePrice, currentCount) {
+    return Math.floor(basePrice * (1.15 ** currentCount));
 }
 
 function setItemName() {
