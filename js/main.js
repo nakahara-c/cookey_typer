@@ -167,9 +167,9 @@ function renderItems() {
 
 function createFallingKeyboard() {
     const keyboardImg = document.createElement('img');
-    keyboardImg.src = 'images/ety.png';
+    keyboardImg.src = 'images/keyboard.png';
     keyboardImg.className = 'falling';
-    keyboardImg.style.width = '50px';
+    keyboardImg.style.height = '30px';
 
     const header = document.querySelector('header');
     header.appendChild(keyboardImg);
