@@ -150,12 +150,16 @@ function adjustCanvasSize() {
 function renderItems() {
     const itemCounts = document.getElementsByName('item-cnt');
     const itemImages = document.getElementsByClassName('item-img');
+    const itemPrices = document.getElementsByName('item-price');
 
     for (let i = 0; i < itemCounts.length; i++) {
         const cnt = Number(itemCounts[i].innerText);
         if (cnt > 0) {
             itemImages[i].classList.remove('locked');
         }
+        const itemPrice = calcPrice(itemData[i].price, cnt + 1);
+        itemPrices[i].innerText = itemPrice;
+
     }
 
     setItemName();
@@ -231,7 +235,7 @@ function buyItem(typedKey) {
     const itemIndex = Number(typedKey) - 1;
     const currentCount = itemBelongings[itemIndex];
 
-    const itemPrice = baseItemPrice;
+    const itemPrice = calcPrice(baseItemPrice, currentCount);
 
     if (masterCount > itemPrice) {
         masterCount -= itemPrice;
@@ -239,6 +243,10 @@ function buyItem(typedKey) {
         itemBelongings[itemIndex] += 1;
         renderItems();
     }
+}
+
+function calcPrice(basePrice, cnt) {
+    return Math.floor(basePrice * (1.15 ** cnt));
 }
 
 function setItemName() {
