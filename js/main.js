@@ -153,15 +153,13 @@ function renderItems() {
     const itemPrices = document.getElementsByName('item-price');
 
     for (let i = 0; i < itemCounts.length; i++) {
-        const cnt = Number(itemCounts[i].innerText);
-        if (cnt > 0) {
+        const cnt = itemBelongings[i];
+        if (i === 0 || itemBelongings[i-1] > 0) {
             itemImages[i].classList.remove('locked');
         }
         const itemPrice = calcPrice(itemData[i].price, cnt);
         itemPrices[i].innerText = itemPrice;
-
     }
-
     setItemName();
 }
 
@@ -253,7 +251,8 @@ function calcPrice(basePrice, currentCount) {
 function setItemName() {
     const itemNames = document.getElementsByName('item-name');
     for (let i = 0; i < itemNames.length; i++) {
-        itemNames[i].innerText = itemData[i].name;
+        const name = i === 0 || itemBelongings[i-1] > 0 ? itemData[i].name : '???';
+        itemNames[i].innerText = name;
     }
 }
 function setItemBelongings() {
