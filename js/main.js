@@ -167,7 +167,6 @@ function createFallingKeyboard() {
     const keyboardImg = document.createElement('img');
     keyboardImg.src = 'images/keyboard.png';
     keyboardImg.className = 'falling';
-    keyboardImg.style.height = '30px';
 
     const header = document.querySelector('header');
     header.appendChild(keyboardImg);
@@ -177,7 +176,7 @@ function createFallingKeyboard() {
 
     setTimeout(() => {
         keyboardImg.remove();
-    }, 5000);
+    }, 6000);
 }
 
 function calculateAutoKpm() {
