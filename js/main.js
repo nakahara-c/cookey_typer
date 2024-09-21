@@ -60,7 +60,7 @@ const chart = new Chart(ctx, {
     data: {
         labels: [],
         datasets: [{
-            label: 'kpm',
+            label: 'kps',
             data: [],
             backgroundColor: "#D2691E",
             borderColor: "#D2691E",
@@ -68,7 +68,7 @@ const chart = new Chart(ctx, {
             tension: 0.3
         },
         {
-            label: 'raw-kpm',
+            label: 'raw-kps',
             data: [],
             backgroundColor: "#FF69B4",
             borderColor: "#FF69B4",
@@ -86,8 +86,11 @@ const chart = new Chart(ctx, {
 });
 
 setInterval(() => {
-    chart.data.datasets[0].data.push(autoKpm);
-    chart.data.datasets[1].data.push(rawKpm);
+    const autoKps = Math.floor(autoKpm / 60);
+    const rawKps = Math.floor(rawKpm / 60);
+
+    chart.data.datasets[0].data.push(autoKps);
+    chart.data.datasets[1].data.push(rawKps);
     chart.data.labels.push('');
     if (chart.data.datasets[0].data.length > 20) {
         chart.data.datasets[0].data.shift();
