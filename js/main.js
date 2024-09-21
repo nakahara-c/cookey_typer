@@ -141,8 +141,8 @@ function adjustCanvasSize() {
     const img = document.getElementById('keyboard');
     const canvas = document.getElementById('glowCanvas');
 
-    canvas.width = img.width + 200;
-    canvas.height = img.height + 200;
+    canvas.width = img.width + 300;
+    canvas.height = img.height + 300;
 
     drawGlowEffect();
 }
