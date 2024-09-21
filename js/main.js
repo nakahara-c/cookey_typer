@@ -270,9 +270,9 @@ function correctType(key) {
     typingArea.value = typeText;
     const baseKps = autoKpm / 60;
     const addCount = Math.max(1, Math.floor(baseKps / 10));
+    typedKeysCount += addCount;
     masterCount += addCount;
     renderPlusAnimation(addCount);
-    typedKeysCount += 1;
 }
 
 function incorrectType(key) {
