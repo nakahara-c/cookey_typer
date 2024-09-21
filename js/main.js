@@ -264,7 +264,10 @@ function setItemBelongings() {
 function correctType(key) {
     typeText = typeText.slice(1);
     typingArea.value = typeText;
-    masterCount += 1;
+    const baseKps = autoKpm / 60;
+    const addCount = Math.floor(baseKps / 10);
+    masterCount += addCount;
+    renderPlusAnimation(addCount);
     typedKeysCount += 1;
 }
 
@@ -274,6 +277,34 @@ function incorrectType(key) {
         typingArea?.classList.remove('missed');
     }, 1000);
 }
+
+function renderPlusAnimation(addCount) {
+    const plus = document.createElement('div');
+    plus.className = 'plus text-white fs-3 position-absolute fade-animation'; // フェードアニメーションのクラスを追加
+    plus.innerText = `+${addCount}`;
+
+    const keyboardImg = document.getElementById('keyboard');
+    const rect = keyboardImg.getBoundingClientRect();
+
+    const parentRect = document.getElementById('keyboard-area').getBoundingClientRect();
+    const randomXOffset = Math.random() * rect.width - rect.width / 2;
+    const randomYOffset = Math.random() * rect.height - rect.height / 2;
+
+    plus.style.left = `${rect.left - parentRect.left + rect.width / 2 + randomXOffset}px`;
+    plus.style.top = `${rect.top - parentRect.top + rect.height / 2 + randomYOffset}px`;
+
+    plus.style.zIndex = '100'; 
+
+    const canvas = document.getElementById('keyboard-area');
+    canvas.appendChild(plus);
+
+    setTimeout(() => {
+        plus.remove();
+    }, 1000);
+}
+
+
+
 
 
 function fisherYatesShuffle(arr) {
