@@ -22,10 +22,11 @@
     <header class="header bg-black d-flex align-items-center position-relative">
         <div class="container my-4">
             <h1 class="fs-1 title text-center" style="color:white;opacity:0.8">
-                Cookey Typer(α)
+                Cookey Typer(β)
             </h1>
         </div>
-        <input type="button" id="legacy" value="Legacy" class="btn btn-danger position-absolute" style="top: 10px; right: 10px; z-index: 1000;">
+        <input type="button" id="legacy" value="Legacy" class="btn btn-danger position-absolute"
+            style="top: 10px; right: 10px; z-index: 1000;">
     </header>
 
 
@@ -46,7 +47,8 @@
                         </div>
                         <div id="keyboard-area" class="image-container my-4">
                             <canvas id="glowCanvas"></canvas>
-                            <img id="keyboard" src="./images/keyboard.png" alt="keyboard" width="300" class="img-fluid mx-auto d-block my-5">
+                            <img id="keyboard" src="./images/keyboard.png" alt="keyboard" width="300"
+                                class="img-fluid mx-auto d-block my-5">
                         </div>
                     </div>
                     <div class="col-4 px-4" style="opacity:0.8">
@@ -55,46 +57,75 @@
                                 <canvas id="myChart"></canvas>
                             </div>
                         </div>
-                        <div class="items p-4 mb-4 bg-secondary text-white d-flex justify-content-between align-items-center rounded-3">
+
+                        <div class="items py-2 px-4 mb-2 bg-secondary text-white d-flex justify-content-between align-items-center rounded-3">
                             <img src="./images/finger.png" alt="finger" class="item-img img-fluid locked">
-                            <h3 class="fs-3 text-center" name="item-name"></h3>
-                            <span name="item-price"></span>
+                            <div class="d-flex flex-column text-center mx-3">
+                                <h3 class="fs-4" name="item-name"></h3>
+                                <span name="item-info" style="white-space: nowrap;">
+                                    <span name="item-price"></span>
+                                </span>
+                            </div>
                             <span id="item-cnt-1" class="fs-3" name="item-cnt">0</span>
                         </div>
-                        <div class="items p-4 mb-4 bg-secondary text-white d-flex justify-content-between align-items-center rounded-3">
+                        <div class="items py-2 px-4 mb-2 bg-secondary text-white d-flex justify-content-between align-items-center rounded-3">
                             <img src="./images/kids.png" alt="kids" class="item-img img-fluid locked">
-                            <h3 class="fs-3 text-center" name="item-name"></h3>
-                            <span name="item-price"></span>
+                            <div class="d-flex flex-column text-center mx-3">
+                                <h3 class="fs-4" name="item-name"></h3>
+                                <span name="item-info" style="white-space: nowrap;">
+                                    <span name="item-price"></span>
+                                </span>
+                            </div>
                             <span id="item-cnt-2" class="fs-3" name="item-cnt">0</span>
                         </div>
-                        <div class="items p-4 mb-4 bg-secondary text-white d-flex justify-content-between align-items-center rounded-3">
+                        <div class="items py-2 px-4 mb-2 bg-secondary text-white d-flex justify-content-between align-items-center rounded-3">
                             <img src="./images/professional.png" alt="professional" class="item-img img-fluid locked">
-                            <h3 class="fs-3 text-center" name="item-name"></h3>
-                            <span name="item-price"></span>
+                            <div class="d-flex flex-column text-center mx-3">
+                                <h3 class="fs-4" name="item-name"></h3>
+                                <span name="item-info" style="white-space: nowrap;">
+                                    <span name="item-price"></span>
+                                </span>
+                            </div>
                             <span id="item-cnt-3" class="fs-3" name="item-cnt">0</span>
                         </div>
-                        <div class="items p-4 mb-4 bg-secondary text-white d-flex justify-content-between align-items-center rounded-3">
+                        <div class="items py-2 px-4 mb-2 bg-secondary text-white d-flex justify-content-between align-items-center rounded-3">
                             <img src="./images/genius.png" alt="genius" class="item-img img-fluid locked">
-                            <h3 class="fs-3 text-center" name="item-name"></h3>
-                            <span name="item-price"></span>
+                            <div class="d-flex flex-column text-center mx-3">
+                                <h3 class="fs-4" name="item-name"></h3>
+                                <span name="item-info" style="white-space: nowrap;">
+                                    <span name="item-price"></span>
+                                </span>
+                            </div>
                             <span id="item-cnt-4" class="fs-3" name="item-cnt">0</span>
                         </div>
-                        <div class="items p-4 mb-4 bg-secondary text-white d-flex justify-content-between align-items-center rounded-3">
+                        <div class="items py-2 px-4 mb-2 bg-secondary text-white d-flex justify-content-between align-items-center rounded-3">
                             <img src="./images/machine.png" alt="machine" class="item-img img-fluid locked">
-                            <h3 class="fs-3 text-center" name="item-name"></h3>
-                            <span name="item-price"></span>
+                            <div class="d-flex flex-column text-center mx-3">
+                                <h3 class="fs-4" name="item-name"></h3>
+                                <span name="item-info" style="white-space: nowrap;">
+                                    <span name="item-price"></span>
+                                </span>
+                            </div>
                             <span id="item-cnt-5" class="fs-3" name="item-cnt">0</span>
                         </div>
-                        <div class="items p-4 mb-4 bg-secondary text-white d-flex justify-content-between align-items-center rounded-3">
+                        <div class="items py-2 px-4 mb-2 bg-secondary text-white d-flex justify-content-between align-items-center rounded-3">
                             <img src="./images/daisuke.png" alt="daisuke" class="item-img img-fluid locked">
-                            <h3 class="fs-3 text-center" name="item-name"></h3>
-                            <span name="item-price"></span>
+                            <div class="d-flex flex-column text-center mx-3">
+                                <h3 class="fs-4" name="item-name"></h3>
+                                <span name="item-info" style="white-space: nowrap;">
+                                    <span name="item-price"></span>
+                                </span>
+                            </div>
                             <span id="item-cnt-6" class="fs-3" name="item-cnt">0</span>
                         </div>
-                        <div class="items p-4 mb-4 bg-secondary text-white d-flex justify-content-between align-items-center rounded-3">
+                        <div class="items py-2 px-4 mb-2 bg-secondary text-white d-flex justify-content-between align-items-center rounded-3">
                             <img src="./images/jquery.png" alt="jquery" class="item-img img-fluid locked">
-                            <h3 class="fs-3 text-center" name="item-name"></h3>
-                            <span name="item-price"></span>
+                            <div class="d-flex flex-column text-center mx-3">
+                                <h3 class="fs-4" name="item-name"></h3>
+                                <span name="item-info" style="white-space: nowrap;">
+                                    <span name="item-price"></span>
+                                </span>
+                            </div>
                             <span id="item-cnt-7" class="fs-3" name="item-cnt">0</span>
                         </div>
                     </div>

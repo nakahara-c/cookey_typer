@@ -159,11 +159,11 @@ function renderItems() {
 
     for (let i = 0; i < itemCounts.length; i++) {
         const cnt = itemBelongings[i];
+        const itemPrice = calcPrice(itemData[i].price, cnt);
         if (i === 0 || itemBelongings[i-1] > 0) {
             itemImages[i].classList.remove('locked');
+            itemPrices[i].innerText = itemPrice + ' keys[' + (i+1) + ']';
         }
-        const itemPrice = calcPrice(itemData[i].price, cnt);
-        itemPrices[i].innerText = itemPrice;
     }
     setItemName();
 }
@@ -238,7 +238,6 @@ function buyItem(typedKey) {
     const currentCount = itemBelongings[itemIndex];
 
     const itemPrice = calcPrice(baseItemPrice, currentCount);
-    console.log(itemPrice);
 
     if (masterCount >= itemPrice) {
         masterCount -= itemPrice;
@@ -307,10 +306,6 @@ function renderPlusAnimation(addCount) {
         plus.remove();
     }, 1000);
 }
-
-
-
-
 
 function fisherYatesShuffle(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
