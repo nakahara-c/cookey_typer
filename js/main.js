@@ -270,7 +270,7 @@ function correctType(key) {
     typeText = typeText.slice(1);
     typingArea.value = typeText;
     const baseKps = autoKpm / 60;
-    const addCount = Math.floor(baseKps / 10);
+    const addCount = Math.max(1, Math.floor(baseKps / 10));
     masterCount += addCount;
     renderPlusAnimation(addCount);
     typedKeysCount += 1;
@@ -285,7 +285,7 @@ function incorrectType(key) {
 
 function renderPlusAnimation(addCount) {
     const plus = document.createElement('div');
-    plus.className = 'plus text-white fs-3 position-absolute fade-animation'; // フェードアニメーションのクラスを追加
+    plus.className = 'plus text-white fs-3 position-absolute fade-animation';
     plus.innerText = `+${addCount}`;
 
     const keyboardImg = document.getElementById('keyboard');
