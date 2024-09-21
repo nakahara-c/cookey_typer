@@ -48,6 +48,11 @@ window.onresize = adjustCanvasSize;
 
 renderItems();
 
+const legacyButton = document.getElementById('legacy');
+legacyButton.addEventListener('click', () => {
+    resetData();
+});
+
 const ctx = document.getElementById('myChart');
 
 const chart = new Chart(ctx, {
