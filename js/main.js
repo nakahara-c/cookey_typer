@@ -117,7 +117,7 @@ function loadData() {
 
 function resetData() {
     localStorage.removeItem('cookeyData');
-    location.reload();
+    if (! localStorage.getItem('cookeyData')) location.reload();
 }
 
 function updateRawKpm() {
