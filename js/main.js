@@ -9,6 +9,7 @@ let typeText = '';
 let order = [];
 let shuffledOrder = [];
 let itemBelongings = [0, 0, 0, 0, 0, 0, 0];
+let isSave = true;
 
 const typingArea = document.getElementById('typing_area');
 const itemButtons = document.getElementsByClassName('items');
@@ -101,6 +102,7 @@ setInterval(() => {
 }, 1000);
 
 function saveData() {
+    if (!isSave) return;
     const data = {
         c: Math.floor(masterCount),
         b: itemBelongings
@@ -116,6 +118,7 @@ function loadData() {
 }
 
 function resetData() {
+    isSave = false;
     localStorage.removeItem('cookeyData');
     if (! localStorage.getItem('cookeyData')) location.reload();
 }
