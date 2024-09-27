@@ -355,7 +355,7 @@ function renderPlusAnimation(addCount) {
 }
 
 function determineNextGolden() {
-    const next = Math.floor(Math.random() * 60000) + 90000;
+    const next = Math.floor(Math.random() * 10000) + 60000;
     return next; //ms
 }
 
