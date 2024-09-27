@@ -10,9 +10,13 @@ let order = [];
 let shuffledOrder = [];
 let itemBelongings = [0, 0, 0, 0, 0, 0, 0];
 let isSave = true;
+let validGolden = false;
+let setGolden = false;
+let nextGolden = determineNextGolden();
 
 const typingArea = document.getElementById('typing_area');
 const itemButtons = document.getElementsByClassName('items');
+const canvas = document.getElementById('keyboard-area');
 
 for (let i = 0; i < itemButtons.length; i++) {
     itemButtons[i].addEventListener('click', () => {
@@ -24,6 +28,7 @@ setWordEnglish(1000, typingArea);
 loadData();
 setItemName();
 setItemBelongings();
+setNextGolden();
 
 const update = () => {
     autoKpm = calculateAutoKpm();
@@ -43,6 +48,24 @@ setInterval(() => {
 setInterval(() => {
     updateRawKpm();
 }, 1000);
+
+function setNextGolden() {
+    nextGolden = determineNextGolden();
+    setTimeout(() => {
+        setGolden = true;
+    }, nextGolden);
+}
+
+function enterGolden() {
+    validGolden = true;
+    canvas.classList.add('gold');
+
+    setTimeout(() => {
+        validGolden = false;
+        canvas.classList.remove('gold');
+        setNextGolden();
+    }, 20000);
+}
 
 window.onload = adjustCanvasSize;
 window.onresize = adjustCanvasSize;
@@ -178,6 +201,10 @@ function createFallingKeyboard() {
     const keyboardImg = document.createElement('img');
     keyboardImg.src = 'images/keyboard.png';
     keyboardImg.className = 'falling';
+    if (setGolden) {
+        keyboardImg.classList.add('golden');
+        setGolden = false;
+    }
 
     const header = document.querySelector('header');
     header.appendChild(keyboardImg);
@@ -186,8 +213,15 @@ function createFallingKeyboard() {
     keyboardImg.style.left = `${randomX}px`;
 
     setTimeout(() => {
-        keyboardImg.remove();
+        removeKeyDom(keyboardImg);
     }, 6000);
+}
+
+function removeKeyDom(dom) {
+    dom.remove();
+    if (dom.classList.contains('golden')) {
+        setNextGolden();
+    }
 }
 
 function calculateAutoKpm() {
@@ -275,13 +309,21 @@ function correctType(key) {
     typeText = typeText.slice(1);
     typingArea.value = typeText;
     const baseKps = autoKpm / 60;
-    const addCount = Math.max(1, Math.floor(baseKps / 10));
+    let addCount = Math.max(1, Math.floor(baseKps / 10));
+    if (validGolden) addCount *= 7;
     typedKeysCount += addCount;
     masterCount += addCount;
     renderPlusAnimation(addCount);
 }
 
 function incorrectType(key) {
+    const golden = document.getElementsByClassName('golden')[0];
+    if (golden && key === 'Enter') {
+        enterGolden();
+        golden.remove();
+        return;
+    }
+
     typingArea?.classList.add('missed');
     setTimeout(() => {
         typingArea?.classList.remove('missed');
@@ -296,7 +338,7 @@ function renderPlusAnimation(addCount) {
     const keyboardImg = document.getElementById('keyboard');
     const rect = keyboardImg.getBoundingClientRect();
 
-    const parentRect = document.getElementById('keyboard-area').getBoundingClientRect();
+    const parentRect = canvas.getBoundingClientRect();
     const randomXOffset = Math.random() * rect.width - rect.width / 2;
     const randomYOffset = Math.random() * rect.height - rect.height / 2;
 
@@ -305,12 +347,16 @@ function renderPlusAnimation(addCount) {
 
     plus.style.zIndex = '100'; 
 
-    const canvas = document.getElementById('keyboard-area');
     canvas.appendChild(plus);
 
     setTimeout(() => {
         plus.remove();
     }, 1000);
+}
+
+function determineNextGolden() {
+    const next = Math.floor(Math.random() * 60000) + 90000;
+    return next; //ms
 }
 
 function fisherYatesShuffle(arr) {

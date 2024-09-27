@@ -69,10 +69,18 @@ body {
 .falling {
   position: absolute;
   left: 50%;
-  height: 70px;
+  height: 80px;
   transform: translateX(-50%);
   filter: drop-shadow(0 0 10px white);
   animation: fall 6s linear infinite;
+}
+
+.gold {
+  filter : invert(100%) sepia(100%) drop-shadow(0 0 40px yellow) !important;
+}
+
+.golden {
+  filter : invert(100%) sepia(100%) drop-shadow(0 0 40px yellow) !important;
 }
 
 .items {
