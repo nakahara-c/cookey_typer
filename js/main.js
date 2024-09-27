@@ -314,6 +314,10 @@ function correctType(key) {
     typedKeysCount += addCount;
     masterCount += addCount;
     renderPlusAnimation(addCount);
+    if (typeText.length === 0) {
+        setWordEnglish(1000, typingArea);
+        console.log('new word');
+    }
 }
 
 function incorrectType(key) {
