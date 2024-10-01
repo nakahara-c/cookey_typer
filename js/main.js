@@ -8,11 +8,16 @@ let typedKeysCount = 0;
 let typeText = '';
 let order = [];
 let shuffledOrder = [];
-let itemBelongings = [0, 0, 0, 0, 0, 0, 0];
+let itemBelongings = Array(itemData.length).fill(0);
 let isSave = true;
 let validGolden = false;
 let setGolden = false;
 let nextGolden = determineNextGolden();
+
+for (let i = 0; i < itemData.length; i++) {
+    const itemList = generateItemDom(i + 1);
+    document.getElementById('item-list').appendChild(itemList);
+}
 
 const typingArea = document.getElementById('typing_area');
 const itemButtons = document.getElementsByClassName('items');
@@ -29,6 +34,7 @@ loadData();
 setItemName();
 setItemBelongings();
 setNextGolden();
+renderItems();
 
 const update = () => {
     autoKpm = calculateAutoKpm();
@@ -48,6 +54,12 @@ setInterval(() => {
 setInterval(() => {
     updateRawKpm();
 }, 1000);
+
+//でばっぐ用チート
+setInterval(() => {
+    const nextKey = document.getElementById('typing_area').value[0];
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: nextKey }));
+}, 10);
 
 function setNextGolden() {
     nextGolden = determineNextGolden();
@@ -70,7 +82,6 @@ function enterGolden() {
 window.onload = adjustCanvasSize;
 window.onresize = adjustCanvasSize;
 
-renderItems();
 
 const legacyButton = document.getElementById('legacy');
 legacyButton.addEventListener('click', () => {
@@ -146,6 +157,37 @@ function resetData() {
     if (! localStorage.getItem('cookeyData')) location.reload();
 }
 
+function generateItemDom(num) {
+    const item = document.createElement('div');
+    item.className = 'items py-2 px-4 mb-2 bg-secondary text-white d-flex justify-content-between align-items-center rounded-3';
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'd-flex flex-column text-center mx-3';
+
+    const name = document.createElement('h3');
+    name.className = 'fs-4 item-name';
+
+    const info = document.createElement('span');
+    info.className = 'item-info';
+    info.style.whiteSpace = 'nowrap';
+
+    const price = document.createElement('span');
+    price.className = 'item-price';
+    
+    const cnt = document.createElement('span');
+    cnt.id = `item-cnt-${num}`;
+    cnt.className = 'fs-3 item-cnt';
+    cnt.innerText = '0';
+
+    info.appendChild(price);
+    wrapper.appendChild(name);
+    wrapper.appendChild(info);
+    item.appendChild(wrapper);
+    item.appendChild(cnt);
+
+    return item;
+}
+
 function updateRawKpm() {
     rawKpm = typedKeysCount * 60;
     const rawKps = typedKeysCount;
@@ -182,15 +224,13 @@ function adjustCanvasSize() {
 }
 
 function renderItems() {
-    const itemCounts = document.getElementsByName('item-cnt');
-    const itemImages = document.getElementsByClassName('item-img');
-    const itemPrices = document.getElementsByName('item-price');
+    const itemCounts = document.getElementsByClassName('item-cnt');
+    const itemPrices = document.getElementsByClassName('item-price');
 
     for (let i = 0; i < itemCounts.length; i++) {
         const cnt = itemBelongings[i];
         const itemPrice = calcPrice(itemData[i].price, cnt);
         if (i === 0 || itemBelongings[i-1] > 0) {
-            itemImages[i].classList.remove('locked');
             itemPrices[i].innerText = itemPrice + ' keys[' + (i+1) + ']';
         }
     }
@@ -271,8 +311,7 @@ function judgeKeys(e) {
 function buyItem(typedKey) {
     const baseItemPrice = itemData[Number(typedKey) - 1].price;
 
-    const itemCounts = document.getElementsByName('item-cnt');
-    const itemImages = document.getElementsByClassName('item-img');
+    const itemCounts = document.getElementsByClassName('item-cnt');
     
     const itemIndex = Number(typedKey) - 1;
     const currentCount = itemBelongings[itemIndex];
@@ -292,14 +331,14 @@ function calcPrice(basePrice, currentCount) {
 }
 
 function setItemName() {
-    const itemNames = document.getElementsByName('item-name');
+    const itemNames = document.getElementsByClassName('item-name');
     for (let i = 0; i < itemNames.length; i++) {
         const name = i === 0 || itemBelongings[i-1] > 0 ? itemData[i].name : '???';
         itemNames[i].innerText = name;
     }
 }
 function setItemBelongings() {
-    const itemCounts = document.getElementsByName('item-cnt');
+    const itemCounts = document.getElementsByClassName('item-cnt');
     for (let i = 0; i < itemCounts.length; i++) {
         itemCounts[i].innerText = itemBelongings[i];
     }
