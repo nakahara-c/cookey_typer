@@ -38,10 +38,12 @@ renderItems();
 
 const update = () => {
     autoKpm = calculateAutoKpm();
-    masterCount += autoKpm / (60 * 10);
-    document.getElementById('typed_count').innerText = String(masterCount.toFixed(0));
-    const kps = ((autoKpm + rawKpm) / 60).toFixed(3);
-    document.getElementById('kps').innerText = String(kps);
+    masterCount += autoKpm / 10;
+    const formattedCount = getNumberUnit(masterCount, 1);
+    document.getElementById('typed_count').innerText = formattedCount;
+    const kps = (autoKpm + rawKpm).toFixed(1);
+    const formattedKps = getNumberUnit(kps, 1);
+    document.getElementById('kps').innerText = formattedKps;
     saveData();
 }
 
@@ -95,14 +97,6 @@ const chart = new Chart(ctx, {
     data: {
         labels: [],
         datasets: [{
-            label: 'kps',
-            data: [],
-            backgroundColor: "#D2691E",
-            borderColor: "#D2691E",
-            borderWidth: 1,
-            tension: 0.3
-        },
-        {
             label: 'raw-kps',
             data: [],
             backgroundColor: "#FF69B4",
@@ -114,22 +108,18 @@ const chart = new Chart(ctx, {
     options: {
         scales: {
             y: {
-                beginAtZero: true
+                beginAtZero: false
             }
         }
     }
 });
 
 setInterval(() => {
-    const autoKps = Math.floor(autoKpm / 60);
-    const rawKps = Math.floor(rawKpm / 60);
-
-    chart.data.datasets[0].data.push(autoKps);
-    chart.data.datasets[1].data.push(rawKps);
+    const rawKps = Math.floor(rawKpm);
+    chart.data.datasets[0].data.push(rawKps);
     chart.data.labels.push('');
     if (chart.data.datasets[0].data.length > 20) {
         chart.data.datasets[0].data.shift();
-        chart.data.datasets[1].data.shift();
         chart.data.labels.shift();
     }
     chart.update();
@@ -148,7 +138,12 @@ function loadData() {
     const data = JSON.parse(localStorage.getItem('cookeyData'));
     if (!data) return;
     if (data.c) masterCount = data.c;
-    if (data.b) itemBelongings = data.b;
+    if (data.b) {
+        itemBelongings = data.b;
+        if (itemBelongings.length < itemData.length) {
+            itemBelongings = Array(itemData.length).fill(0);
+        }
+    }
 }
 
 function resetData() {
@@ -189,9 +184,10 @@ function generateItemDom(num) {
 }
 
 function updateRawKpm() {
-    rawKpm = typedKeysCount * 60;
+    rawKpm = typedKeysCount;
     const rawKps = typedKeysCount;
-    document.getElementById('raw-kps').innerText = String(rawKps);
+    const formattedRawKps = getNumberUnit(rawKps, 1);
+    document.getElementById('raw-kps').innerText = formattedRawKps;
     typedKeysCount = 0;
 }
 
@@ -230,8 +226,9 @@ function renderItems() {
     for (let i = 0; i < itemCounts.length; i++) {
         const cnt = itemBelongings[i];
         const itemPrice = calcPrice(itemData[i].price, cnt);
+        const formattedItemPrice = getNumberUnit(itemPrice, 0);
         if (i === 0 || itemBelongings[i-1] > 0) {
-            itemPrices[i].innerText = itemPrice + ' keys[' + (i+1) + ']';
+            itemPrices[i].innerText = formattedItemPrice + ' keys[' + (i+1) + ']';
         }
     }
     setItemName();
@@ -347,9 +344,9 @@ function setItemBelongings() {
 function correctType(key) {
     typeText = typeText.slice(1);
     typingArea.value = typeText;
-    const baseKps = autoKpm / 60;
-    let addCount = Math.max(1, Math.floor(baseKps / 10));
-    if (validGolden) addCount *= 7;
+    const baseKps = autoKpm;
+    let addCount = Math.max(1, Math.floor(baseKps));
+    if (validGolden) addCount *= 77;
     typedKeysCount += addCount;
     masterCount += addCount;
     renderPlusAnimation(addCount);
@@ -373,7 +370,7 @@ function incorrectType(key) {
 }
 
 function renderPlusAnimation(addCount) {
-    const plus = document.createElement('div');
+    const plus = document.createElement('h3');
     plus.className = 'plus text-white fs-3 position-absolute fade-animation';
     plus.innerText = `+${addCount}`;
 
@@ -422,4 +419,11 @@ function reorder(array, cnt) {
         }
     }
     return result;
+}
+
+function getNumberUnit (num, round = 1) {
+    const unit = Math.floor(Math.round(num / 1.0e+1).toLocaleString().replaceAll(',', '').length),
+        wunit = ["Thousand","Million","Billion","Trillion","Quadrillion","Quintillion","Sextillion","Septillion","Octillion","Nonillion","Decillion","Undecillion","Duodecillion","Tredecillion","Quattuordecillion","Quindecillion","Sexdecillion","Septemdecillion","Octodecillion","Novemdecillion","Vigintillion","Unvigintillion","Duovigintillion","Trevigintillion","Quattuorvigintillion","Quinvigintillion","Sexvigintillion","Septvigintillion","Octovigintillion","Nonvigintillion","Trigintillion","Untrigintillion","Duotrigintillion"][Math.floor(unit / 3) - 1],
+        funit = Math.abs(Number(num))/Number('1.0e+'+(unit-unit%3));
+    return wunit ? funit.toFixed(round).toLocaleString() + ' ' + wunit : num.toFixed(round).toString();
 }

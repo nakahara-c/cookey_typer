@@ -1,9 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@100..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Playpen+Sans:wght@100..800&display=swap');
 
 .title {
   font-family: "Playpen Sans", cursive;
   font-optical-sizing: auto;
-  font-weight: 600;
+  font-weight: 700;
+  font-style: normal;
+}
+
+h2, h3 {
+  font-family: "Merriweather", Georgia, serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
   font-style: normal;
 }
 
