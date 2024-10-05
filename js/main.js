@@ -39,7 +39,7 @@ renderItems();
 const update = () => {
     autoKpm = calculateAutoKpm();
     masterCount += autoKpm / 10;
-    const formattedCount = getNumberUnit(masterCount, 1);
+    const formattedCount = getNumberUnit(masterCount, 0);
     document.getElementById('typed_count').innerText = formattedCount;
     const kps = (autoKpm + rawKpm).toFixed(1);
     const formattedKps = getNumberUnit(kps, 1);
@@ -61,7 +61,7 @@ setInterval(() => {
 setInterval(() => {
     const nextKey = document.getElementById('typing_area').value[0];
     window.dispatchEvent(new KeyboardEvent('keydown', { key: nextKey }));
-}, 100);
+}, 10);
 
 function setNextGolden() {
     nextGolden = determineNextGolden();
@@ -229,7 +229,8 @@ function renderItems() {
         const formattedItemPrice = getNumberUnit(itemPrice, 0);
         if (i === 0 || itemBelongings[i-1] > 0) {
             itemPrices[i].innerText = formattedItemPrice + ' keys[' + itemData[i].trigger + ']';
-            itemPrices[i].innerText += ' (' + itemData[i].power + ' kps)';
+            const pow = addBonus(itemData[i].power, cnt);
+            itemPrices[i].innerText += ' (' + pow + ' kps)';
         }
     }
     setItemName();
@@ -266,7 +267,8 @@ function calculateAutoKpm() {
     let newKpm = 0;
     for (let i = 0; i < itemData.length; i++) {
         const itemCount = itemBelongings[i];
-        newKpm += itemData[i].power * itemCount;
+        const basePower = itemData[i].power * itemCount;
+        newKpm += addBonus(basePower, itemCount);
     }
     return newKpm;
 }
@@ -341,8 +343,9 @@ function setItemBelongings() {
     }
 }
 
-function addBonus(kps, cnt) {
-
+function addBonus(pow, cnt) {
+    const bonus = Math.floor(cnt / 25) + 1;
+    return pow * bonus;
 }
 
 function correctType(key) {
