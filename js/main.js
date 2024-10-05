@@ -57,11 +57,11 @@ setInterval(() => {
     updateRawKpm();
 }, 1000);
 
-//でばっぐ用チート
-// setInterval(() => {
-//     const nextKey = document.getElementById('typing_area').value[0];
-//     window.dispatchEvent(new KeyboardEvent('keydown', { key: nextKey }));
-// }, 100);
+// でばっぐ用チート
+setInterval(() => {
+    const nextKey = document.getElementById('typing_area').value[0];
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: nextKey }));
+}, 100);
 
 function setNextGolden() {
     nextGolden = determineNextGolden();
@@ -228,7 +228,8 @@ function renderItems() {
         const itemPrice = calcPrice(itemData[i].price, cnt);
         const formattedItemPrice = getNumberUnit(itemPrice, 0);
         if (i === 0 || itemBelongings[i-1] > 0) {
-            itemPrices[i].innerText = formattedItemPrice + '[' + itemData[i].trigger + ']';
+            itemPrices[i].innerText = formattedItemPrice + ' keys[' + itemData[i].trigger + ']';
+            itemPrices[i].innerText += ' (' + itemData[i].power + ' kps)';
         }
     }
     setItemName();
@@ -304,7 +305,8 @@ function judgeKeys(e) {
 }
 
 function buyItem(typedKey) {
-    const baseItemPrice = itemData[Number(typedKey) - 1].price;
+    const idx = triggerKeys.indexOf(typedKey);
+    const baseItemPrice = itemData[Number(idx)].price;
 
     const itemCounts = document.getElementsByClassName('item-cnt');
     
@@ -337,6 +339,10 @@ function setItemBelongings() {
     for (let i = 0; i < itemCounts.length; i++) {
         itemCounts[i].innerText = itemBelongings[i];
     }
+}
+
+function addBonus(kps, cnt) {
+
 }
 
 function correctType(key) {
