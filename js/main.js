@@ -1,5 +1,5 @@
 import { wordList } from './wordList.js';
-import { itemData } from './itemData.js';
+import { itemData, triggerKeys } from './itemData.js';
 
 let masterCount = 0;
 let autoKpm = 0;
@@ -58,10 +58,10 @@ setInterval(() => {
 }, 1000);
 
 //でばっぐ用チート
-setInterval(() => {
-    const nextKey = document.getElementById('typing_area').value[0];
-    window.dispatchEvent(new KeyboardEvent('keydown', { key: nextKey }));
-}, 10);
+// setInterval(() => {
+//     const nextKey = document.getElementById('typing_area').value[0];
+//     window.dispatchEvent(new KeyboardEvent('keydown', { key: nextKey }));
+// }, 100);
 
 function setNextGolden() {
     nextGolden = determineNextGolden();
@@ -228,7 +228,7 @@ function renderItems() {
         const itemPrice = calcPrice(itemData[i].price, cnt);
         const formattedItemPrice = getNumberUnit(itemPrice, 0);
         if (i === 0 || itemBelongings[i-1] > 0) {
-            itemPrices[i].innerText = formattedItemPrice + ' keys[' + (i+1) + ']';
+            itemPrices[i].innerText = formattedItemPrice + '[' + itemData[i].trigger + ']';
         }
     }
     setItemName();
@@ -292,12 +292,10 @@ function judgeKeys(e) {
     let typedKey = e.key;
     let nextKey = typeText[0];
 
-    const numberKeys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
-
     if (typedKey === nextKey) {
         correctType(typedKey);
     } else {
-        if (numberKeys.includes(typedKey)) {
+        if (triggerKeys.includes(typedKey)) {
             buyItem(typedKey);
         } else {
             incorrectType(typedKey);
@@ -421,7 +419,8 @@ function reorder(array, cnt) {
     return result;
 }
 
-function getNumberUnit (num, round = 1) {
+function getNumberUnit(num, round = 1) {
+    num = Number(num);
     const unit = Math.floor(Math.round(num / 1.0e+1).toLocaleString().replaceAll(',', '').length),
         wunit = ["Thousand","Million","Billion","Trillion","Quadrillion","Quintillion","Sextillion","Septillion","Octillion","Nonillion","Decillion","Undecillion","Duodecillion","Tredecillion","Quattuordecillion","Quindecillion","Sexdecillion","Septemdecillion","Octodecillion","Novemdecillion","Vigintillion","Unvigintillion","Duovigintillion","Trevigintillion","Quattuorvigintillion","Quinvigintillion","Sexvigintillion","Septvigintillion","Octovigintillion","Nonvigintillion","Trigintillion","Untrigintillion","Duotrigintillion"][Math.floor(unit / 3) - 1],
         funit = Math.abs(Number(num))/Number('1.0e+'+(unit-unit%3));
